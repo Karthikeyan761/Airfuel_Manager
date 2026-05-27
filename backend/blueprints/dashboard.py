@@ -110,32 +110,48 @@ def fuel_consumption_chart():
 @dashboard_bp.route('/price-chart', methods=['GET'])
 @jwt_required()
 def price_chart():
-    """Last 30 days price trend for line chart."""
-    from blueprints.fuel_purchases import fuel_purchases_bp
-
+    """Last 30 days price trend for line chart with gap filling."""
+    # Get all purchases to have historical context for carrying forward prices
     purchases = FuelPurchase.query.order_by(FuelPurchase.purchase_date).all()
 
-    # Build dual-series dataset
-    jet_prices = {}
-    avgas_prices = {}
+    # Build maps of price history
+    jet_history = {}
+    avgas_history = {}
     for p in purchases:
-        key = p.purchase_date.isoformat()
+        dt_str = p.purchase_date.isoformat()
         if p.fuel_type == 'Jet A1':
-            jet_prices[key] = p.price_per_liter
+            jet_history[dt_str] = p.price_per_liter
         elif p.fuel_type == 'Avgas':
-            avgas_prices[key] = p.price_per_liter
+            avgas_history[dt_str] = p.price_per_liter
 
-    all_dates = sorted(set(list(jet_prices.keys()) + list(avgas_prices.keys())))
-
-    # Last 30 data points
-    all_dates = all_dates[-30:]
-
+    # Generate the last 30 dates
+    today = date.today()
+    date_list = [(today - timedelta(days=i)) for i in range(29, -1, -1)]
+    
     result = []
-    for d in all_dates:
+    
+    # For each date, find the most recent price
+    for d in date_list:
+        d_str = d.isoformat()
+        
+        # Get Jet A1 price (exact match or most recent historical)
+        jet_p = jet_history.get(d_str)
+        if jet_p is None:
+            past_dates = sorted([k for k in jet_history.keys() if k < d_str], reverse=True)
+            if past_dates:
+                jet_p = jet_history[past_dates[0]]
+        
+        # Get Avgas price
+        avgas_p = avgas_history.get(d_str)
+        if avgas_p is None:
+            past_dates = sorted([k for k in avgas_history.keys() if k < d_str], reverse=True)
+            if past_dates:
+                avgas_p = avgas_history[past_dates[0]]
+        
         result.append({
-            'date': d,
-            'jet_a1_price': jet_prices.get(d),
-            'avgas_price': avgas_prices.get(d)
+            'date': d_str,
+            'jet_a1_price': jet_p,
+            'avgas_price': avgas_p
         })
 
     return jsonify(result), 200

@@ -73,21 +73,26 @@ def create_user():
         return jsonify({'error': 'Admin access required'}), 403
 
     data = request.get_json()
-    required = ['username', 'email', 'password', 'role']
+    required = ['username', 'password', 'role']
     for field in required:
         if not data.get(field):
             return jsonify({'error': f'{field} is required'}), 400
 
+    # Auto-generate email if not provided
+    email = data.get('email') or f"{data['username']}@aerofuel.internal"
+
     if User.query.filter_by(username=data['username']).first():
         return jsonify({'error': 'Username already exists'}), 409
 
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({'error': 'Email already exists'}), 409
+    if User.query.filter_by(email=email).first():
+        # Try a unique variant
+        import time
+        email = f"{data['username']}.{int(time.time())}@aerofuel.internal"
 
     if data['role'] not in ['admin', 'operator']:
         return jsonify({'error': 'Role must be admin or operator'}), 400
 
-    user = User(username=data['username'], email=data['email'], role=data['role'])
+    user = User(username=data['username'], email=email, role=data['role'])
     user.set_password(data['password'])
     db.session.add(user)
     db.session.commit()

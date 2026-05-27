@@ -23,12 +23,13 @@ def create_app(config_class=Config):
     """Application factory function."""
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.url_map.strict_slashes = False
 
     # Initialize extensions
     db.init_app(app)
     ma.init_app(app)
     JWTManager(app)
-    CORS(app, origins=["http://localhost:3000"], supports_credentials=True)
+    CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"], supports_credentials=True)
 
     # Register Blueprints
     app.register_blueprint(auth_bp, url_prefix='/api/auth')

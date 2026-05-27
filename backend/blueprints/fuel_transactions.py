@@ -10,7 +10,7 @@ from models import FuelTransaction, FuelInventory
 fuel_transactions_bp = Blueprint('fuel_transactions', __name__)
 
 
-@fuel_transactions_bp.route('/', methods=['GET'])
+@fuel_transactions_bp.route('', methods=['GET'])
 @jwt_required()
 def list_transactions():
     """List all fuel transactions with filters."""

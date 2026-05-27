@@ -1,0 +1,14 @@
+{
+  "name": "aerofuel-manager-root",
+  "version": "1.0.0",
+  "description": "Root controller for AeroFuel Manager",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "start cmd /k \"cd frontend && npm start\" & start cmd /k \"cd backend && python app.py\"",
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && python app.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

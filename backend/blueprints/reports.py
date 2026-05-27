@@ -184,7 +184,8 @@ def export_pdf():
     title_map = {
         'trip_costs': 'Fuel Cost Per Trip Report',
         'monthly_usage': 'Monthly Fuel Usage Report',
-        'aircraft_consumption': 'Aircraft-Wise Fuel Consumption Report'
+        'aircraft_consumption': 'Aircraft-Wise Fuel Consumption Report',
+        'fuel_purchases': 'Fuel Procurement & Purchase Report'
     }
 
     elements.append(Paragraph('✈ Aircraft Fuel Management System', title_style))
@@ -233,6 +234,46 @@ def export_pdf():
             elements.append(tbl)
         else:
             elements.append(Paragraph('No completed flights in selected period.', styles['Normal']))
+
+    elif report_type == 'fuel_purchases':
+        purchases = FuelPurchase.query.filter(
+            FuelPurchase.purchase_date >= start,
+            FuelPurchase.purchase_date <= end
+        ).order_by(FuelPurchase.purchase_date).all()
+
+        table_data = [['Date', 'Supplier', 'Location', 'Fuel Type', 'Invoice #', 'Quantity (L)', 'Price/L (₹)', 'Total (₹)']]
+        total_qty = 0
+        total_cost = 0
+
+        for p in purchases:
+            row_total = p.quantity_liters * p.price_per_liter
+            total_qty += p.quantity_liters
+            total_cost += row_total
+            table_data.append([
+                p.purchase_date.strftime('%Y-%m-%d'),
+                p.supplier_name,
+                p.location,
+                p.fuel_type,
+                p.invoice_number or '-',
+                f'{p.quantity_liters:,.1f}',
+                f'₹{p.price_per_liter:,.2f}',
+                f'₹{row_total:,.2f}'
+            ])
+
+        if len(table_data) > 1:
+            # Summary Row
+            table_data.append(['TOTAL', '', '', '', '', f'{total_qty:,.1f}', '', f'₹{total_cost:,.2f}'])
+            
+            tbl = Table(table_data, colWidths=[2.5*cm, 4.5*cm, 4*cm, 2.5*cm, 3*cm, 3*cm, 3*cm, 4*cm])
+            tbl.setStyle(header_style)
+            # Add some extra styling for the summary row
+            tbl.setStyle(TableStyle([
+                ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor('#e2e8f0')),
+                ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+            ]))
+            elements.append(tbl)
+        else:
+            elements.append(Paragraph('No purchase records found in selected period.', styles['Normal']))
 
     elif report_type == 'monthly_usage':
         records = DailyFuelUsage.query.order_by(DailyFuelUsage.usage_date).all()

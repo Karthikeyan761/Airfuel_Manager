@@ -9,7 +9,7 @@ from models import DailyFuelUsage
 daily_usage_bp = Blueprint('daily_usage', __name__)
 
 
-@daily_usage_bp.route('/', methods=['GET'])
+@daily_usage_bp.route('', methods=['GET'])
 @jwt_required()
 def list_daily_usage():
     """
