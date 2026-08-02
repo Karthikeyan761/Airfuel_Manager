@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { inventory } from '../api/services';
-import { Database, ArrowDownRight, ArrowUpRight, TrendingDown, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Database, RefreshCw, AlertTriangle } from 'lucide-react';
 
 const TX_BADGE = {
   allocation:  { label: 'Allocation',  cls: 'badge-amber' },
@@ -62,7 +62,6 @@ const FuelInventoryPage = () => {
           const fillColor = isJet
             ? 'linear-gradient(90deg,#1d4ed8,#3b82f6)'
             : 'linear-gradient(90deg,#d97706,#f59e0b)';
-          const accent = isJet ? 'var(--primary-accent)' : 'var(--warning)';
 
           return (
             <div key={inv.fuel_type} className="glass-card card" style={{ padding: '24px 30px', display: 'flex', gap: 20, alignItems: 'center' }}>

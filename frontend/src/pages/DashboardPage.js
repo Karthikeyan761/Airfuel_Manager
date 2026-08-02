@@ -88,7 +88,6 @@ const DashboardPage = () => {
   const [acData, setAcData]       = useState([]);
   const [activeFuels, setActiveFuels] = useState(['Jet A1', 'Avgas']);
   const [loading, setLoading]     = useState(true);
-  const [lastRefresh, setLastRefresh] = useState(new Date());
 
   const toggleFuel = (fuel) => {
     setActiveFuels(prev => {
@@ -122,7 +121,6 @@ const DashboardPage = () => {
       })));
 
       setAcData(acRes.data);
-      setLastRefresh(new Date());
     } catch (err) {
       console.error('Dashboard fetch error', err);
     } finally {

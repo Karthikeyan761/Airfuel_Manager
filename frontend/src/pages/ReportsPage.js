@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Cell
 } from 'recharts';
-import { FileText, Download, Loader, BarChart3, Plane, CalendarRange } from 'lucide-react';
+import { FileText, Download, Loader, Plane, CalendarRange } from 'lucide-react';
 
 const REPORT_TYPES = [
   { id: 'trip_costs',           label: 'Trip Costs',          icon: <FileText size={18}/>,    desc: 'Per-flight fuel cost breakdown' },

@@ -2,8 +2,8 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
-  LayoutDashboard, Plane, PlaneTakeoff, Fuel, History, MapPin,
-  TrendingUp, FileText, LogOut, Users, BarChart3,
+  Plane, PlaneTakeoff, Fuel,
+  TrendingUp, FileText, LogOut, Users,
   ArrowLeftRight, CalendarDays, ShieldCheck
 } from 'lucide-react';
 

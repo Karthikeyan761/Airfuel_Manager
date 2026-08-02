@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { purchases } from '../api/services';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -22,7 +22,7 @@ const PriceTrendsPage = () => {
   const [loading, setLoading] = useState(true);
   const [predicting, setPredicting] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setPredictions(null);
     try {
@@ -51,11 +51,11 @@ const PriceTrendsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeFuel, range]);
 
   useEffect(() => {
     fetchData();
-  }, [activeFuel, range]);
+  }, [fetchData]);
 
   const handlePredict = async () => {
     setPredicting(true);

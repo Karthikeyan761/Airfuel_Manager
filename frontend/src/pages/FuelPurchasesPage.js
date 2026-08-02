@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { purchases, reports } from '../api/services';
-import { Plus, X, AlertCircle, CheckCircle, Filter, Search, FileText } from 'lucide-react';
+import { Plus, X, AlertCircle, CheckCircle, FileText } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-
-const FUEL_TYPES = ['', 'Jet A1', 'Avgas'];
 
 const AddPurchaseModal = ({ onClose, onSuccess, currentPrices }) => {
   const [form, setForm] = useState({

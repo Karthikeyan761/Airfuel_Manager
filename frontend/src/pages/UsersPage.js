@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../api/services';
 import { useAuth } from '../contexts/AuthContext';
-import { Users, Plus, X, AlertCircle, CheckCircle, ShieldCheck, UserCheck } from 'lucide-react';
+import { Users, Plus, X, AlertCircle, CheckCircle } from 'lucide-react';
 
 const AddUserModal = ({ onClose, onSuccess }) => {
   const [form, setForm]   = useState({ username: '', password: '', role: 'operator' });

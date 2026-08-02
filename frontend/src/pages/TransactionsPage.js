@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { inventory } from '../api/services';
-import { ArrowLeftRight, Filter } from 'lucide-react';
+import { ArrowLeftRight } from 'lucide-react';
 
 const TX_BADGE = {
   allocation:  { label: 'Allocation',  cls: 'badge-amber' },
