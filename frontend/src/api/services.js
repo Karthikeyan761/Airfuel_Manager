@@ -1,6 +1,6 @@
 import client from './client';
 
-export const DEMO_MODE = true; // Set to false to connect to the real Flask backend
+export const DEMO_MODE = false; // Set to false to connect to the real Flask backend
 
 // Helper resolve/reject mechanisms for Demo Mode
 const mockResolve = (data) => Promise.resolve({ data });
